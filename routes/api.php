@@ -24,14 +24,18 @@ Route::group(['middleware' => ['cors', 'json.response']], function(){
         ]);
     });
 
-	Route::group(['middleware' => ['auth:api']], function(){
 
 		Route::group(['prefix' => 'v1'], function(){
 
 			Route::controller(AuthController::class)->group(function(){
+				Route::post('/register', 'register');
+				Route::post('/verify-otp', 'verifyUserOtp');
+				Route::post('/login', 'login');
+			}); 
 
+			Route::group(['middleware' => ['auth:api']], function(){
+				
 			});
-		}); 
 
 	});
 });

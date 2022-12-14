@@ -1,11 +1,11 @@
 <x-mail::message>
-# Introduction
+Hi {{$user->name}}, 
 
-The body of your message.
+Please use the token below to verify your account
 
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+<x-mail::panel >
+	Token : <b>{{$otp}}</b>
+</x-mail::panel>
 
 Thanks,<br>
 {{ config('app.name') }}
