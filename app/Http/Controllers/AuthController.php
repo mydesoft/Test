@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserType;
+use App\Enums\UserStatus;
 use App\Helpers\Utils;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
+use App\Http\Requests\ResendOtpRequest;
 use App\Http\Requests\VerifyUserOtpRequest;
+use App\Http\Resources\UserResource;
+use Laravel\Passport\Passport;
 use App\Mail\VerifyOtp;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -34,7 +38,7 @@ class AuthController extends Controller
 
     	Mail::to($user->email)->send(new VerifyOtp($user, $otp));
 
-    	return $this->created($user);
+    	return $this->created(new UserResource($user));
     }
 
      public function verifyUserOtp(VerifyUserOtpRequest $request): JsonResponse
@@ -54,6 +58,25 @@ class AuthController extends Controller
         $user = User::where('email', $userToken->email)->update(['is_verified' => true]);
 
        	return $this->success();
+
+    }
+
+    public function resendVerificationOtp(ResendOtpRequest $request): JsonResponse
+    {
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user) {
+
+            return $this->notFound();
+        }
+
+        $otp = Utils::generateOtp();
+
+        $this->saveOtp($user->email, $otp);
+
+        Mail::to($user->email)->send(new VerifyOtp($user, $otp));
+
+        return $this->success();
 
     }
 
@@ -77,8 +100,19 @@ class AuthController extends Controller
 
             return $this->customError('user_not_verified', 403, 'User has not been verified');
         }
+
+        if (! $user->status == UserStatus::SUSPENDED->value) {
+
+            return $this->customError('user_suspended', 403, 'User has been suspended');
+        }
       
         $token = $user->createToken($user->name)->accessToken;
+
+        //Logs user out after two minutes of inactivity
+        if ($user->user_type == UserType::USER->value) {
+
+           Passport::personalAccessTokensExpireIn(now()->addMinutes(2));
+        }
 
         Auth::login($user);
 

@@ -6,7 +6,7 @@ use App\Helpers\Utils;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-// use Illuminate\Support\Facades\Artisan;
+use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 

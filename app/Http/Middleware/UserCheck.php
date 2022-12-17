@@ -18,8 +18,6 @@ class UserCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        public function handle(Request $request, Closure $next)
-    {
         if ($request->user()->user_type == UserType::USER->value) {
             
               return $next($request);
@@ -31,5 +29,5 @@ class UserCheck
         ], HttpStatusCode::FORBIDDEN->value);
         }
     }
-    }
+    
 }

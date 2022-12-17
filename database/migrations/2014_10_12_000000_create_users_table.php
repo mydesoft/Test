@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('user_type', ['user', 'admin'])->nullable();
             $table->boolean('is_verified')->default(false);
+            $table->enum('status', ['active', 'suspended'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });
