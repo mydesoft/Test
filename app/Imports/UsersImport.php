@@ -16,7 +16,7 @@ class UsersImport implements ToModel, WithHeadingRow,  WithChunkReading, ShouldQ
    
     public function model(array $row)
 	{
-	    $emails =  ['email' => $row['email']];
+	    $emails =  ['email' => $row['Email']];
 
 	    $invitationLink = url('/register');
 
