@@ -25,7 +25,7 @@ class ActivityRequest extends FormRequest
     {
         return [
             
-            'email' => ['required', 'email'],
+            'email' => ['sometimes', 'email'],
             'role' => ['sometimes', 'required'],
         ];
     }

@@ -24,7 +24,7 @@ class AdminCheck
         }
        else{
             return response()->json([
-            'statusText' => 'forbidden',
+            'statusText' => 'You have to be an admin to access this resource',
             'statusCode' => HttpStatusCode::FORBIDDEN,
         ], HttpStatusCode::FORBIDDEN->value);
         }

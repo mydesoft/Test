@@ -20,11 +20,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
-    public function updatePermission(ActivityRequest $request): JsonResponse
+    public function updatePermission(ActivityRequest $request, string $id): JsonResponse
     {
     	$data = $request->validated();
 
-    	$user = User::where('email', $data['email'])->first();
+    	$user = User::find($id);
 
     	if (!$user) {
     		
@@ -45,11 +45,11 @@ class AdminController extends Controller
     		
     }
 
-    public function updateStatus(ActivityRequest $request): JsonResponse
+    public function updateStatus(ActivityRequest $request, string $id): JsonResponse
     {
     	$data = $request->validated();
 
-    	$user = User::where('email', $data['email'])->first();
+    	$user = User::find($id);
 
     	if (!$user) {
     		

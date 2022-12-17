@@ -101,18 +101,13 @@ class AuthController extends Controller
             return $this->customError('user_not_verified', 403, 'User has not been verified');
         }
 
-        if (! $user->status == UserStatus::SUSPENDED->value) {
+
+        if ($user->status == UserStatus::SUSPENDED->value) {
 
             return $this->customError('user_suspended', 403, 'User has been suspended');
         }
       
         $token = $user->createToken($user->name)->accessToken;
-
-        //Logs user out after two minutes of inactivity
-        if ($user->user_type == UserType::USER->value) {
-
-           Passport::personalAccessTokensExpireIn(now()->addMinutes(2));
-        }
 
         Auth::login($user);
 

@@ -39,7 +39,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function(){
 			Route::group(['middleware' => ['auth:api']], function(){
 
 				Route::post('/logout', [AuthController::class, 'logout']);
-				
+
 				//User Routes
 				Route::group(['middleware' => ['user']], function(){
 
@@ -54,8 +54,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function(){
 				Route::group(['middleware' => ['admin']], function(){
 
 					Route::controller(AdminController::class)->prefix('admin')->group(function(){
-						Route::post('/update-permission', 'updatePermission');
-						Route::post('/update-status', 'updateStatus');
+						Route::post('/update-permission/{user}', 'updatePermission');
+						Route::post('/update-status/{user}', 'updateStatus');
 						Route::post('/invite-user', 'inviteUser');
 						Route::post('/bulk-upload-users', 'bulkUploadUsers');
 						Route::post('/fund-user-wallet/{user}', 'fundUserWallet');
