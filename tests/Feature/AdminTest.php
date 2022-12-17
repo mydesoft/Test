@@ -32,9 +32,9 @@ class AdminTest extends TestCase
        
         $user = User::factory()->create();
 
-        $data = ['email' => $user->email, 'role' => 'admin'];
+        $data = ['role' => 'admin'];
 
-        $response = $this->post('/api/v1/admin/update-permission', $data);
+        $response = $this->post('/api/v1/admin/update-permission/'.$user->id, $data);
 
         $response->assertStatus(200);
    
@@ -47,15 +47,15 @@ class AdminTest extends TestCase
        
         $user = User::factory()->create();
 
-        $data = ['email' => 'kem@test.com', 'role' => 'admin'];
+        $data = ['role' => 'admin'];
 
-        $response = $this->post('/api/v1/admin/update-permission', $data);
+        $userId = 100;
+
+        $response = $this->post('/api/v1/admin/update-permission/'.$userId, $data);
 
         $response->assertStatus(404);
 
-        $this->assertDatabaseMissing('users', [
-             'email' => 'kem@test.com',
-        ]);
+         $this->assertDatabaseMissing('users', ['id' => 100]);
     }
 
     public function test_admin_can_update_user_status(){
@@ -64,9 +64,7 @@ class AdminTest extends TestCase
        
         $user = User::factory()->create();
 
-        $data = ['email' => $user->email];
-
-        $response = $this->post('/api/v1/admin/update-status?status=suspended', $data);
+        $response = $this->post('/api/v1/admin/update-status/'.$user->id.'?status=suspended');
 
         $response->assertStatus(200);   
     }
@@ -77,15 +75,13 @@ class AdminTest extends TestCase
        
         $user = User::factory()->create();
 
-        $data = ['email' => 'kem@test.com'];
+        $userId = 100;
 
-        $response = $this->post('/api/v1/admin/update-status?status=suspended', $data);
+        $response = $this->post('/api/v1/admin/update-status/'.$userId.'?status=suspended');
 
         $response->assertStatus(404);
 
-        $this->assertDatabaseMissing('users', [
-             'email' => 'kem@test.com',
-        ]);  
+        $this->assertDatabaseMissing('users', ['id' => 100]); 
     }
 
     public function test_admin_can_invite_user(){
